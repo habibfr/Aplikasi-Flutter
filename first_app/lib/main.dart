@@ -17,58 +17,35 @@ class Home extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Colors.red[600],
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+      body: Row(
         children: <Widget>[
-          Container(
-            child: Text("first"),
-            padding: EdgeInsets.all(20.0),
-            color: Colors.red,
-            margin: EdgeInsets.fromLTRB(0, 20.0, 0, 0),
+          Expanded(
+            flex: 3,
+            child: Image.asset("assets/nino-1.jfif"),
           ),
-          Container(
-            child: Text("second"),
-            padding: EdgeInsets.all(25.0),
-            color: Colors.green,
+          Expanded(
+            flex: 1,
+            child: Container(
+              child: Text("first"),
+              color: Colors.red,
+              padding: EdgeInsets.all(20.0),
+            ),
           ),
-          Container(
-            child: Text("third"),
-            padding: EdgeInsets.all(40.0),
-            color: Colors.blue,
-            margin: EdgeInsets.only(bottom: 10.0),
+          Expanded(
+            flex: 1,
+            child: Container(
+              child: Text("second"),
+              color: Colors.green,
+              padding: EdgeInsets.all(20.0),
+            ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: <Widget>[
-              Container(
-                child: Text("row1"),
-                color: Colors.amber,
-                padding: EdgeInsets.all(20.0),
-              ),
-              Container(
-                child: Text("row2"),
-                color: Colors.cyanAccent,
-                padding: EdgeInsets.all(30.0),
-              ),
-            ],
-          ),
-          Container(
-            child: Text("first"),
-            padding: EdgeInsets.all(20.0),
-            color: Colors.red,
-            margin: EdgeInsets.fromLTRB(0, 10.0, 0, 0),
-          ),
-          Container(
-            child: Text("second"),
-            padding: EdgeInsets.all(25.0),
-            color: Colors.green,
-          ),
-          Container(
-            child: Text("third"),
-            padding: EdgeInsets.all(40.0),
-            color: Colors.blue,
+          Expanded(
+            flex: 1,
+            child: Container(
+              child: Text("third"),
+              color: Colors.blue,
+              padding: EdgeInsets.all(20.0),
+            ),
           ),
         ],
       ),

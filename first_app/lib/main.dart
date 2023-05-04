@@ -18,8 +18,10 @@ class Home extends StatelessWidget {
         backgroundColor: Colors.red[600],
       ),
       body: const Center(
-        child: Image(
-          image: AssetImage("assets/nino-1.jfif"),
+        child: Icon(
+          Icons.ac_unit_sharp,
+          color: Colors.red,
+          size: 50.0,
         ),
       ),
       floatingActionButton: FloatingActionButton(

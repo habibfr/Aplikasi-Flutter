@@ -18,8 +18,9 @@ class Home extends StatelessWidget {
         backgroundColor: Colors.red[600],
       ),
       body: Center(
-        child: OutlinedButton(
-          child: Text("Click"),
+        child: ElevatedButton.icon(
+          icon: const Icon(Icons.mail),
+          label: const Text("mail me"),
           onPressed: () {
             print("you click me!");
           },

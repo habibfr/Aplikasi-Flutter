@@ -17,11 +17,12 @@ class Home extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Colors.red[600],
       ),
-      body: const Center(
-        child: Icon(
-          Icons.ac_unit_sharp,
-          color: Colors.red,
-          size: 50.0,
+      body: Center(
+        child: OutlinedButton(
+          child: Text("Click"),
+          onPressed: () {
+            print("you click me!");
+          },
         ),
       ),
       floatingActionButton: FloatingActionButton(

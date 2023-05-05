@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'quote.dart';
+import 'quote_card.dart';
 
 void main() {
   runApp(
@@ -8,7 +9,6 @@ void main() {
     )
   );
 }
-
 
 class QuotesList extends StatefulWidget {
   const QuotesList({Key? key}) : super(key: key);
@@ -22,36 +22,8 @@ class _QuotesListState extends State<QuotesList> {
   List<Quote> quotes = [
     Quote(text: "belajar flutter di net ninja", author: "habib"),
     Quote(text: "sekarang tahun 2023 bulan mei", author: "nino"),
-    Quote(text: "nonton anime adalah yang terbaik", author: "nakano")
+    Quote(text: "nonton anime adalah yang terbaik", author: "Nakano")
   ];
-
-  Widget quoteTemplate(quote){
-    return Card(
-      margin: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Text(
-              quote.text,
-              style: TextStyle(
-                fontSize: 18.0
-              ),
-            ),
-            SizedBox(height: 5.0),
-            Text(
-              quote.author,
-              style: TextStyle(
-                fontSize: 15.0,
-              ),
-            ),
-          ],
-
-        ),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,8 +33,9 @@ class _QuotesListState extends State<QuotesList> {
         centerTitle: true,
       ),
       body: Column(
-        children: quotes.map((quote) => quoteTemplate(quote)).toList(),
+        children: quotes.map((quote) => QuoteCard(quote: quote)).toList(),
       ),
     );
   }
 }
+

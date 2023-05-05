@@ -25,6 +25,34 @@ class _QuotesListState extends State<QuotesList> {
     Quote(text: "nonton anime adalah yang terbaik", author: "nakano")
   ];
 
+  Widget quoteTemplate(quote){
+    return Card(
+      margin: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Text(
+              quote.text,
+              style: TextStyle(
+                fontSize: 18.0
+              ),
+            ),
+            SizedBox(height: 5.0),
+            Text(
+              quote.author,
+              style: TextStyle(
+                fontSize: 15.0,
+              ),
+            ),
+          ],
+
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,8 +61,7 @@ class _QuotesListState extends State<QuotesList> {
         centerTitle: true,
       ),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: quotes.map((quote) => Text('${quote.text} - ${quote.author}')).toList(),
+        children: quotes.map((quote) => quoteTemplate(quote)).toList(),
       ),
     );
   }

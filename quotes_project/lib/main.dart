@@ -32,8 +32,26 @@ class _QuotesListState extends State<QuotesList> {
         title: Text("Quotes Awasome"),
         centerTitle: true,
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          setState(() {
+            quotes.add(Quote(text: "nonton anime adalah yang terbaik", author: "Nakano"));
+            quotes.add(Quote(text: "belajar flutter di net ninja", author: "habib"));
+          });
+        },
+        child: Icon(
+          Icons.add
+        ),
+      ),
       body: Column(
-        children: quotes.map((quote) => QuoteCard(quote: quote)).toList(),
+        children: quotes.map((quote) => QuoteCard(
+          quote: quote,
+          delete: (){
+            setState(() {
+              quotes.remove(quote);
+            });
+          },
+        )).toList(),
       ),
     );
   }

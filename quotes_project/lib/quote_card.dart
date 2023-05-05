@@ -3,8 +3,10 @@ import 'quote.dart';
 
 class QuoteCard extends StatelessWidget {
   final Quote quote;
+  final VoidCallback delete;
   const QuoteCard({
     required this.quote,
+    required this.delete,
     super.key,
   });
 
@@ -27,11 +29,24 @@ class QuoteCard extends StatelessWidget {
             Text(
               quote.author,
               style: TextStyle(
-                fontSize: 15.0,
+                fontSize: 14.0,
               ),
             ),
+            SizedBox(height: 6.0,),
+            TextButton.icon(
+              onPressed: delete,
+              icon: Icon(
+                Icons.delete,
+                color: Colors.redAccent,
+              ),
+              label: Text(
+                "Delete",
+                style: TextStyle(
+                  color: Colors.redAccent,
+                ),
+              ),
+            )
           ],
-
         ),
       ),
     );

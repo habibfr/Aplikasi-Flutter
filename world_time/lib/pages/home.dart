@@ -10,9 +10,12 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   Map data = {};
   String bgImage = '';
+
   @override
   Widget build(BuildContext context) {
-    data = ModalRoute.of(context)!.settings.arguments as Map;
+    data = data.isNotEmpty
+        ? data
+        : ModalRoute.of(context)!.settings.arguments as Map;
 
     bgImage = data['isDayTime'] ? 'day-3.jfif' : 'night-1.jfif';
     Color? bgColor = data['isDayTime'] ? Colors.blue[400] : Colors.indigo[800];
@@ -22,18 +25,24 @@ class _HomeState extends State<Home> {
       body: SafeArea(
         child: Container(
           decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/${bgImage}'),
-              fit: BoxFit.cover
-            )
-          ),
+              image: DecorationImage(
+                  image: AssetImage('assets/${bgImage}'), fit: BoxFit.cover)),
           child: Padding(
             padding: const EdgeInsets.only(top: 100.0),
             child: Column(
               children: [
                 TextButton.icon(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/chooseLocation');
+                  onPressed: () async {
+                    dynamic result =
+                        await Navigator.pushNamed(context, '/chooseLocation');
+                    setState(() {
+                      data = {
+                        'location': result['location'],
+                        'time': result['time'],
+                        'flag': result['flag'],
+                        'isDayTime': result['isDayTime']
+                      };
+                    });
                   },
                   icon: Icon(
                     Icons.location_on,
@@ -52,7 +61,10 @@ class _HomeState extends State<Home> {
                   children: <Widget>[
                     Text(
                       data['location'],
-                      style: TextStyle(fontSize: 28.0, letterSpacing: 2.0, color: Colors.white),
+                      style: TextStyle(
+                          fontSize: 28.0,
+                          letterSpacing: 2.0,
+                          color: Colors.white),
                     ),
                   ],
                 ),
@@ -61,10 +73,7 @@ class _HomeState extends State<Home> {
                 ),
                 Text(
                   data['time'],
-                  style: TextStyle(
-                    fontSize: 66.0,
-                    color: Colors.white
-                  ),
+                  style: TextStyle(fontSize: 66.0, color: Colors.white),
                 )
               ],
             ),

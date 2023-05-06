@@ -24,7 +24,7 @@ class WorldTime{
       DateTime now = DateTime.parse(dateTime);
 
 
-      isDayTime = now.hour < 13 && now.hour > 6 ? true : false;
+      isDayTime = now.hour < 19 && now.hour > 6 ? true : false;
       time = DateFormat.jm().format(now);
     }catch(e){
       time = "could not get time data!";

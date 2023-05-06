@@ -8,9 +8,8 @@ class ChooseLocation extends StatefulWidget {
 }
 
 class _ChooseLocationState extends State<ChooseLocation> {
-
   int counter = 0;
-  
+
   @override
   void initState() {
     // TODO: implement initState
@@ -30,7 +29,7 @@ class _ChooseLocationState extends State<ChooseLocation> {
         elevation: 0,
       ),
       body: ElevatedButton(
-        onPressed: (){
+        onPressed: () {
           setState(() {
             counter += 1;
           });

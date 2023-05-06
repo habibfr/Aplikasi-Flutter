@@ -8,6 +8,7 @@ class WorldTime{
   String flag;
   String url;
   String time = "";
+  bool isDayTime = false;
 
   WorldTime({required this.location, required this.flag, required this.url});
 
@@ -23,6 +24,7 @@ class WorldTime{
       DateTime now = DateTime.parse(dateTime);
 
 
+      isDayTime = now.hour < 13 && now.hour > 6 ? true : false;
       time = DateFormat.jm().format(now);
     }catch(e){
       time = "could not get time data!";

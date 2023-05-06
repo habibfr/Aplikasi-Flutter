@@ -51,7 +51,7 @@ class _ChooseLocationState extends State<ChooseLocation> {
         appBar: AppBar(
           title: Text("Choose Location"),
           centerTitle: true,
-          backgroundColor: Colors.blue[900],
+          backgroundColor: Colors.indigo[600],
           elevation: 0,
         ),
         body: ListView.builder(

@@ -30,7 +30,7 @@ class _SigInState extends State<SigIn> {
               print("error");
             } else {
               print("sign in");
-              print(result);
+              print(result.uid);
             }
           },
           style: ElevatedButton.styleFrom(

@@ -1,5 +1,6 @@
 import 'package:brew_project/screens/services/auth.dart';
 import 'package:flutter/material.dart';
+import '../../shared/constants.dart';
 
 class SigIn extends StatefulWidget {
   final toggleView;
@@ -46,8 +47,11 @@ class _SigInState extends State<SigIn> {
                 SizedBox(
                   height: 20.0,
                 ),
-                Text("email : "),
                 TextFormField(
+                  decoration: inputDecoration.copyWith(
+                    label: Text("Email"),
+                    hintText: "habib@gmail.com",
+                  ),
                   validator: (value) => (value!.isEmpty || !value.contains("@"))
                       ? "email not valid"
                       : null,
@@ -60,8 +64,8 @@ class _SigInState extends State<SigIn> {
                 SizedBox(
                   height: 20.0,
                 ),
-                Text("Password : "),
                 TextFormField(
+                  decoration: inputDecoration,
                   validator: (value) => value!.length < 6 || value.contains(" ")
                       ? "password not valid, min 6 char"
                       : null,

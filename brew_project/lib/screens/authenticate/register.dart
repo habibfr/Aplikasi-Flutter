@@ -1,14 +1,15 @@
-import 'package:brew_project/screens/services/auth.dart';
 import 'package:flutter/material.dart';
 
-class SigIn extends StatefulWidget {
-  const SigIn({super.key});
+import '../services/auth.dart';
+
+class Register extends StatefulWidget {
+  const Register({super.key});
 
   @override
-  State<SigIn> createState() => _SigInState();
+  State<Register> createState() => _RegisterState();
 }
 
-class _SigInState extends State<SigIn> {
+class _RegisterState extends State<Register> {
   final AuthService _auth = AuthService();
 
   String email = '';
@@ -19,7 +20,7 @@ class _SigInState extends State<SigIn> {
     return Scaffold(
         backgroundColor: Colors.brown[100],
         appBar: AppBar(
-          title: Text("Sign In"),
+          title: Text("Sign Up"),
           elevation: 0.0,
           backgroundColor: Colors.brown[400],
         ),
@@ -60,7 +61,7 @@ class _SigInState extends State<SigIn> {
                       print(email);
                       print(password);
                     },
-                    child: Text("Sign in"))
+                    child: Text("Register"))
               ],
             ),
           ),

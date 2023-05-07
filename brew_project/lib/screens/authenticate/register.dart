@@ -12,9 +12,11 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   final AuthService _auth = AuthService();
+  final _formKey = GlobalKey<FormState>();
 
   String email = '';
   String password = "";
+  String error = '';
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +37,7 @@ class _RegisterState extends State<Register> {
         body: Container(
           padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 0.0),
           child: Form(
+            key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
@@ -43,6 +46,9 @@ class _RegisterState extends State<Register> {
                 ),
                 Text("email : "),
                 TextFormField(
+                  validator: (value) => (value!.isEmpty || !value.contains("@"))
+                      ? "email not valid"
+                      : null,
                   onChanged: (value) {
                     setState(() {
                       email = value;
@@ -55,6 +61,9 @@ class _RegisterState extends State<Register> {
                 Text("Password : "),
                 TextFormField(
                   obscureText: true,
+                  validator: (value) => value!.length < 6 || value.contains(" ")
+                      ? "password not valid, min 6 char"
+                      : null,
                   onChanged: (value) {
                     setState(() {
                       password = value;
@@ -65,11 +74,26 @@ class _RegisterState extends State<Register> {
                   height: 20.0,
                 ),
                 ElevatedButton(
+                    child: Text("Register"),
                     onPressed: () async {
-                      print(email);
-                      print(password);
-                    },
-                    child: Text("Register"))
+                      if (_formKey.currentState!.validate()) {
+                        dynamic result = await _auth
+                            .registerWithEmailAndPassword(email, password);
+                        if (result == null) {
+                          setState(() {
+                            error =
+                                "register fail, please fill field a valid value";
+                          });
+                        }
+                      }
+                    }),
+                SizedBox(
+                  height: 12.0,
+                ),
+                Text(
+                  error,
+                  style: TextStyle(color: Colors.redAccent),
+                )
               ],
             ),
           ),

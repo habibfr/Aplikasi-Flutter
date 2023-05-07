@@ -1,5 +1,6 @@
 import 'package:brew_project/models/my_user.dart';
 import 'package:brew_project/screens/services/database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthService {
@@ -66,4 +67,6 @@ class AuthService {
       return null;
     }
   }
+
+  
 }

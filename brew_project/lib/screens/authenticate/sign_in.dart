@@ -11,9 +11,11 @@ class SigIn extends StatefulWidget {
 
 class _SigInState extends State<SigIn> {
   final AuthService _auth = AuthService();
+  final _formKey = GlobalKey<FormState>();
 
   String email = '';
   String password = "";
+  String error = '';
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +39,7 @@ class _SigInState extends State<SigIn> {
         body: Container(
           padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 0.0),
           child: Form(
+            key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
@@ -45,6 +48,9 @@ class _SigInState extends State<SigIn> {
                 ),
                 Text("email : "),
                 TextFormField(
+                  validator: (value) => (value!.isEmpty || !value.contains("@"))
+                      ? "email not valid"
+                      : null,
                   onChanged: (value) {
                     setState(() {
                       email = value;
@@ -56,6 +62,9 @@ class _SigInState extends State<SigIn> {
                 ),
                 Text("Password : "),
                 TextFormField(
+                  validator: (value) => value!.length < 6 || value.contains(" ")
+                      ? "password not valid, min 6 char"
+                      : null,
                   obscureText: true,
                   onChanged: (value) {
                     setState(() {
@@ -68,10 +77,25 @@ class _SigInState extends State<SigIn> {
                 ),
                 ElevatedButton(
                     onPressed: () async {
-                      print(email);
-                      print(password);
+                      if (_formKey.currentState!.validate()) {
+                        dynamic result = await _auth.signInWithEmailAndPassword(
+                            email, password);
+                        if (result == null) {
+                          setState(() {
+                            error =
+                                "login fail, please fill field a valid value";
+                          });
+                        }
+                      }
                     },
-                    child: Text("Sign in"))
+                    child: Text("Sign in")),
+                SizedBox(
+                  height: 12.0,
+                ),
+                Text(
+                  error,
+                  style: TextStyle(color: Colors.redAccent),
+                )
               ],
             ),
           ),

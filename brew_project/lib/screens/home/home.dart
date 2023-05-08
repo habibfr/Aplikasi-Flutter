@@ -13,6 +13,17 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     final AuthService _auth = AuthService();
 
+    void _showSettingPanel() {
+      showModalBottomSheet(
+          context: context,
+          builder: (context) {
+            return Container(
+              padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 60),
+              child: Text("bottom sheets"),
+            );
+          });
+    }
+
     return StreamProvider<List<Brew>?>.value(
       initialData: null,
       value: DatabaseService().brews,
@@ -33,6 +44,16 @@ class Home extends StatelessWidget {
                 ),
                 label: Text(
                   'Logout',
+                  style: TextStyle(color: Colors.white),
+                )),
+            TextButton.icon(
+                onPressed: _showSettingPanel,
+                icon: Icon(
+                  Icons.settings,
+                  color: Colors.white,
+                ),
+                label: Text(
+                  "Setting",
                   style: TextStyle(color: Colors.white),
                 ))
           ],

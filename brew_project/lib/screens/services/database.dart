@@ -27,7 +27,7 @@ class DatabaseService {
   Stream<List<Brew>> get brews {
     return brewCollection
         .snapshots()
-        .map((QuerySnapshot snapshot) => _brewListFromSnapshot(snapshot));
-    // .map((_brewListFromSnapshot));
+        // .map((QuerySnapshot snapshot) => _brewListFromSnapshot(snapshot));
+        .map((_brewListFromSnapshot));
   }
 }

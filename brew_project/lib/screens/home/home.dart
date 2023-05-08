@@ -1,3 +1,4 @@
+import 'package:brew_project/models/brew.dart';
 import 'package:brew_project/screens/services/auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,7 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     final AuthService _auth = AuthService();
 
-    return StreamProvider<QuerySnapshot?>.value(
+    return StreamProvider<List<Brew>?>.value(
       initialData: null,
       value: DatabaseService().brews,
       child: Scaffold(

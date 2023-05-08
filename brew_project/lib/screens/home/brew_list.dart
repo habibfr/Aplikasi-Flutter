@@ -24,7 +24,7 @@ class _BrewListState extends State<BrewList> {
     //   });
     // }
     // print(brews!.docs);
-    return ListView.builder(
+    return ListView?.builder(
       itemCount: brews!.length,
       itemBuilder: (context, index) {
         return BrewTile(

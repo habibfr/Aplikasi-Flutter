@@ -12,9 +12,9 @@ class _SettingsFormState extends State<SettingsForm> {
   final _formKey = GlobalKey<FormState>();
   final List<String> sugars = ['1', "2", '3', '4', '5'];
 
-  var _currentName;
-  var _currentStrength;
-  var _currentSugars;
+  var _currentName = '';
+  var _currentStrength = 100;
+  var _currentSugars = "100";
 
   @override
   Widget build(BuildContext context) {
@@ -48,10 +48,23 @@ class _SettingsFormState extends State<SettingsForm> {
               }).toList(),
               onChanged: (value) {
                 setState(() {
-                  _currentSugars = value;
+                  _currentSugars = value!;
                 });
               }),
           SizedBox(height: 20.0),
+          Slider(
+            value: _currentStrength.toDouble(),
+            min: 100.0,
+            max: 900.0,
+            divisions: 8,
+            activeColor: Colors.brown[_currentStrength],
+            inactiveColor: Colors.brown,
+            onChanged: (value) {
+              setState(() {
+                _currentStrength = value.round();
+              });
+            },
+          ),
           ElevatedButton(
               onPressed: () async {
                 print(_currentName);

@@ -4,6 +4,7 @@ import 'package:brew_project/shared/constants.dart';
 import 'package:brew_project/shared/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:brew_project/screens/services/database.dart';
 
 class SettingsForm extends StatefulWidget {
   const SettingsForm({super.key});
@@ -25,15 +26,15 @@ class _SettingsFormState extends State<SettingsForm> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<MyUser>(context);
-    print(user.uid);
+    // print(user.uid);
 
     return StreamBuilder<UserData>(
         stream: DatabaseService(uid: user?.uid).userData,
         builder: (context, snapshot) {
-          print(snapshot.hasData);
+          // print(snapshot.hasData);
           if (snapshot.hasData) {
             UserData userData = snapshot.data!;
-            print(userData);
+            // print(userData);
             return Form(
               key: _formKey,
               child: Column(
@@ -86,9 +87,13 @@ class _SettingsFormState extends State<SettingsForm> {
                   ),
                   ElevatedButton(
                       onPressed: () async {
-                        print(_currentName);
-                        print(_currentStrength);
-                        print(_currentSugars);
+                        if (_formKey.currentState!.validate()) {
+                          await DatabaseService(uid: user!.uid).updateUser(
+                              _currentSugars ?? userData.sugars,
+                              _currentName ?? userData.name,
+                              _currentStrength.toInt() ?? userData.strength);
+                          Navigator.pop(context);
+                        }
                       },
                       child: Text("Update"))
                 ],

@@ -32,7 +32,7 @@ class Home extends StatelessWidget {
         backgroundColor: Colors.brown[100],
         appBar: AppBar(
           backgroundColor: Colors.brown[400],
-          title: Text('Brew crew'),
+          title: Text('Coffeee in'),
           elevation: 0.0,
           actions: <Widget>[
             TextButton.icon(
@@ -59,7 +59,12 @@ class Home extends StatelessWidget {
                 ))
           ],
         ),
-        body: BrewList(),
+        body: Container(
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage("assets/kopi_bg2.jfif"),
+                    fit: BoxFit.cover)),
+            child: BrewList()),
       ),
     );
   }

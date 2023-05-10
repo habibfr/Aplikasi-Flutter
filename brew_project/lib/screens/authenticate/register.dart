@@ -36,8 +36,14 @@ class _RegisterState extends State<Register> {
                       onPressed: () {
                         widget.toggleView();
                       },
-                      icon: Icon(Icons.person),
-                      label: Text("Login"))
+                      icon: Icon(
+                        Icons.person,
+                        color: Colors.white,
+                      ),
+                      label: Text(
+                        "Login",
+                        style: TextStyle(color: Colors.white),
+                      ))
                 ]),
             body: Container(
               padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 0.0),
@@ -84,6 +90,8 @@ class _RegisterState extends State<Register> {
                       height: 20.0,
                     ),
                     ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.brown),
                         child: Text("Register"),
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {

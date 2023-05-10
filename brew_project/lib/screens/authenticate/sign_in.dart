@@ -37,8 +37,14 @@ class _SigInState extends State<SigIn> {
                         widget.toggleView();
                       });
                     },
-                    icon: Icon(Icons.person_add_alt_1),
-                    label: Text("Register"))
+                    icon: Icon(
+                      Icons.person_add_alt_1,
+                      color: Colors.white,
+                    ),
+                    label: Text(
+                      "Register",
+                      style: TextStyle(color: Colors.white),
+                    ))
               ],
             ),
             body: Container(
@@ -86,6 +92,8 @@ class _SigInState extends State<SigIn> {
                       height: 20.0,
                     ),
                     ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.brown),
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
                             setState(() {

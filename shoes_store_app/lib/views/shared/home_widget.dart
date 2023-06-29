@@ -4,13 +4,16 @@ import 'package:shoes_store_app/models/sneaker_model.dart';
 import 'package:shoes_store_app/views/shared/appstyle.dart';
 import 'package:shoes_store_app/views/shared/new_shoes.dart';
 import 'package:shoes_store_app/views/shared/product_card.dart';
+import 'package:shoes_store_app/views/ui/product_by_cat.dart';
 
 class HomeWidget extends StatelessWidget {
   const HomeWidget({
     super.key,
     required Future<List<Sneakers>> shoes,
+    required this.tabIndex,
   }) : _shoes = shoes;
 
+  final int tabIndex;
   final Future<List<Sneakers>> _shoes;
 
   @override
@@ -59,21 +62,34 @@ class HomeWidget extends StatelessWidget {
                     "Latest shoes",
                     style: appStyle(18, Colors.black, FontWeight.bold),
                   ),
-                  Row(
-                    children: [
-                      Text(
-                        "Show all",
-                        style: appStyle(
-                          18,
-                          Colors.black,
-                          FontWeight.w500,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              ProductByCat(tabIndex: tabIndex),
                         ),
-                      ),
-                      Icon(
-                        Ionicons.caret_forward,
-                        size: 22,
-                      )
-                    ],
+                      );
+
+                      // print(tabIndex);
+                    },
+                    child: Row(
+                      children: [
+                        Text(
+                          "Show all",
+                          style: appStyle(
+                            18,
+                            Colors.black,
+                            FontWeight.w500,
+                          ),
+                        ),
+                        Icon(
+                          Ionicons.caret_forward,
+                          size: 22,
+                        )
+                      ],
+                    ),
                   ),
                 ],
               ),

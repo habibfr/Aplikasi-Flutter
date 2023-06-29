@@ -3,6 +3,8 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:shoes_store_app/models/sneaker_model.dart';
 import 'package:shoes_store_app/services/helper.dart';
+import 'package:shoes_store_app/views/shared/category_btn.dart';
+import 'package:shoes_store_app/views/shared/custom_spacer.dart';
 import 'package:shoes_store_app/views/shared/stagger_tile.dart';
 
 import '../shared/appstyle.dart';
@@ -10,7 +12,9 @@ import '../shared/latest_shoes.dart';
 import '../shared/product_card.dart';
 
 class ProductByCat extends StatefulWidget {
-  const ProductByCat({super.key});
+  const ProductByCat({super.key, required this.tabIndex});
+
+  final int tabIndex;
 
   @override
   State<ProductByCat> createState() => _ProductByCatState();
@@ -19,7 +23,7 @@ class ProductByCat extends StatefulWidget {
 class _ProductByCatState extends State<ProductByCat>
     with TickerProviderStateMixin {
   late final TabController _tabController =
-      TabController(length: 3, vsync: this);
+      TabController(initialIndex: widget.tabIndex, length: 3, vsync: this);
 
   late Future<List<Sneakers>> _male;
   late Future<List<Sneakers>> _female;
@@ -36,6 +40,13 @@ class _ProductByCatState extends State<ProductByCat>
   void getKids() {
     _kids = Helper().getKidSneakers();
   }
+
+  List<String> brand = [
+    "assets/images/adidas.png",
+    "assets/images/gucci.png",
+    "assets/images/jordan.png",
+    "assets/images/nike.png",
+  ];
 
   @override
   void initState() {
@@ -81,6 +92,7 @@ class _ProductByCatState extends State<ProductByCat>
                         GestureDetector(
                           onTap: () {
                             // Navigator.pop(context);
+                            filter();
                           },
                           child: Icon(
                             Ionicons.options,
@@ -99,7 +111,7 @@ class _ProductByCatState extends State<ProductByCat>
                     labelColor: Colors.white,
                     labelStyle: appStyle(16, Colors.white, FontWeight.bold),
                     unselectedLabelColor: Colors.grey.withOpacity(0.3),
-                    tabs: const [
+                    tabs: [
                       Tab(
                         text: "Men Shoes",
                       ),
@@ -131,6 +143,129 @@ class _ProductByCatState extends State<ProductByCat>
                 ),
               ),
             )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<dynamic> filter() {
+    double _value = 100.0;
+    return showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      barrierColor: Colors.transparent,
+      builder: (context) => Container(
+        height: MediaQuery.of(context).size.height * 0.8,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+        ),
+        child: Column(
+          children: [
+            SizedBox(
+              height: 10,
+            ),
+            Container(
+              height: 5,
+              width: 40,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10),
+                  ),
+                  color: Colors.black),
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.7,
+              child: Column(
+                children: [
+                  Text(
+                    "Filter",
+                    style: appStyle(32, Colors.black, FontWeight.bold),
+                  ),
+                  CustomSpacer(),
+                  Text(
+                    "Gender",
+                    style: appStyle(18, Colors.black, FontWeight.bold),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CategoryBtn(buttonClr: Colors.black, label: "Men"),
+                      CategoryBtn(buttonClr: Colors.grey, label: "Women"),
+                      CategoryBtn(buttonClr: Colors.grey, label: "Kids"),
+                    ],
+                  ),
+                  CustomSpacer(),
+                  Text(
+                    "Category",
+                    style: appStyle(18, Colors.black, FontWeight.bold),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CategoryBtn(buttonClr: Colors.grey, label: "Shoes"),
+                      CategoryBtn(buttonClr: Colors.grey, label: "Apparrels"),
+                      CategoryBtn(buttonClr: Colors.grey, label: "Accessories"),
+                    ],
+                  ),
+                  CustomSpacer(),
+                  Text(
+                    "Price",
+                    style: appStyle(18, Colors.black, FontWeight.bold),
+                  ),
+                  Slider(
+                      activeColor: Colors.black,
+                      inactiveColor: Colors.grey,
+                      thumbColor: Colors.black,
+                      max: 500,
+                      divisions: 50,
+                      label: _value.toString(),
+                      value: _value,
+                      secondaryTrackValue: 200,
+                      onChanged: (double value) {}),
+                  // CustomSpacer(),
+                  Text(
+                    "Brand",
+                    style: appStyle(18, Colors.black, FontWeight.bold),
+                  ),
+                  Container(
+                    height: 60,
+                    child: ListView.builder(
+                      itemCount: brand.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: EdgeInsets.all(12),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade200,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(8),
+                              ),
+                            ),
+                            child: Image.asset(brand[index]),
+                            height: 70,
+                            width: 65,
+                            // width: 80,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),

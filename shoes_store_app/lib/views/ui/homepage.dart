@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:ionicons/ionicons.dart';
+import 'package:shoes_store_app/models/sneaker_model.dart';
+import 'package:shoes_store_app/services/helper.dart';
 import 'package:shoes_store_app/views/shared/appstyle.dart';
+import 'package:shoes_store_app/views/shared/new_shoes.dart';
+import 'package:shoes_store_app/views/shared/product_card.dart';
+
+import '../shared/home_widget.dart';
 // import 'package:shoes_store_app/views/shared/appstyle.dart';
 
 class HomePage extends StatefulWidget {
@@ -12,9 +19,36 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late final TabController _tabController =
       TabController(length: 3, vsync: this);
+
+  late Future<List<Sneakers>> _male;
+  late Future<List<Sneakers>> _female;
+  late Future<List<Sneakers>> _kids;
+
+  void getMale() {
+    _male = Helper().getMaleSneakers();
+  }
+
+  void getFemale() {
+    _female = Helper().getFemaleSneakers();
+  }
+
+  void getKids() {
+    _kids = Helper().getKidSneakers();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getMale();
+    // print(_male);
+    getFemale();
+    getKids();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFE2e2e2),
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
         child: Stack(
@@ -43,6 +77,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           36, Colors.white, FontWeight.bold, 1.2),
                     ),
                     TabBar(
+                        padding: EdgeInsets.zero,
                         indicatorSize: TabBarIndicatorSize.label,
                         indicatorColor: Colors.transparent,
                         controller: _tabController,
@@ -50,7 +85,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         labelColor: Colors.white,
                         labelStyle: appStyle(16, Colors.white, FontWeight.bold),
                         unselectedLabelColor: Colors.grey.withOpacity(0.3),
-                        tabs: [
+                        tabs: const [
                           Tab(
                             text: "Men Shoes",
                           ),
@@ -68,32 +103,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             Padding(
               padding: EdgeInsets.only(
                   top: MediaQuery.of(context).size.height * 0.285),
-              child: TabBarView(controller: _tabController, children: [
-                Column(
+              child: Container(
+                padding: EdgeInsets.only(left: 12),
+                child: TabBarView(
+                  controller: _tabController,
                   children: [
-                    Container(
-                      height: MediaQuery.of(context).size.height * 0.405,
-                      color: Colors.amber,
-                    ),
+                    HomeWidget(shoes: _male),
+                    HomeWidget(shoes: _female),
+                    HomeWidget(shoes: _kids),
                   ],
                 ),
-                Column(
-                  children: [
-                    Container(
-                      height: MediaQuery.of(context).size.height * 0.405,
-                      color: Colors.green,
-                    ),
-                  ],
-                ),
-                Column(
-                  children: [
-                    Container(
-                      height: MediaQuery.of(context).size.height * 0.405,
-                      color: Colors.amber,
-                    ),
-                  ],
-                ),
-              ]),
+              ),
             )
           ],
         ),

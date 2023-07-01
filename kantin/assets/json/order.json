@@ -1,0 +1,20 @@
+[
+  {
+    "id": "1",
+    "id_product": "1",
+    "name": "Product 1",
+    "qty": 1,
+    "imageUrl": "assets/images/p1.png",
+    "unit_price": 500,
+    "total": 500
+  },
+  {
+    "id": "2",
+    "id_product": "2",
+    "name": "Product 2",
+    "qty": 2,
+    "imageUrl": "assets/images/p1.png",
+    "unit_price": 500,
+    "total": 1000
+  }
+]

@@ -1,0 +1,32 @@
+[
+  {
+    "id": "2",
+    "name": "Combo 2",
+    "imageUrl": "assets/images/p3.png",
+    "price": 1000
+  },
+  {
+    "id": "1",
+    "name": "Combo 1",
+    "imageUrl": "assets/images/p2.png",
+    "price": 500
+  },
+  {
+    "id": "4",
+    "name": "Combo 4",
+    "imageUrl": "assets/images/p2.png",
+    "price": 7900
+  },
+  {
+    "id": "3",
+    "name": "Combo 3",
+    "imageUrl": "assets/images/p1.png",
+    "price": 7900
+  },
+  {
+    "id": "5",
+    "name": "Combo 5",
+    "imageUrl": "assets/images/p1.png",
+    "price": 7900
+  }
+]

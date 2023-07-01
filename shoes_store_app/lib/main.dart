@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
 import 'package:shoes_store_app/controllers/mainscreen_provider.dart';
+import 'package:shoes_store_app/controllers/product_provider.dart';
 import 'package:shoes_store_app/views/ui/mainscreen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Hive.initFlutter();
+  await Hive.openBox('cart_box');
+  await Hive.openBox('fav_box');
   runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(create: (context) => MainScreenNotifier())
+    ChangeNotifierProvider(create: (context) => MainScreenNotifier()),
+    ChangeNotifierProvider(create: (context) => PorductNotifier()),
   ], child: const MyApp()));
 }
 

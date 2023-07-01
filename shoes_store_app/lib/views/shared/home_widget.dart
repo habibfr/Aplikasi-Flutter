@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:provider/provider.dart';
+import 'package:shoes_store_app/controllers/product_provider.dart';
 import 'package:shoes_store_app/models/sneaker_model.dart';
 import 'package:shoes_store_app/views/shared/appstyle.dart';
 import 'package:shoes_store_app/views/shared/new_shoes.dart';
 import 'package:shoes_store_app/views/shared/product_card.dart';
 import 'package:shoes_store_app/views/ui/product_by_cat.dart';
+import 'package:shoes_store_app/views/ui/product_page.dart';
 
 class HomeWidget extends StatelessWidget {
   const HomeWidget({
@@ -18,6 +21,8 @@ class HomeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var productNotifier = Provider.of<PorductNotifier>(context);
+
     return Column(
       children: [
         SizedBox(
@@ -28,7 +33,7 @@ class HomeWidget extends StatelessWidget {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return CircularProgressIndicator();
               } else if (snapshot.hasError) {
-                print(snapshot.error);
+                // print(snapshot.error);
                 return Text("Error ${snapshot.error}");
               } else {
                 final shoes = snapshot.data;
@@ -38,12 +43,25 @@ class HomeWidget extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final shoe = snapshot.data![index];
 
-                    return ProductCard(
-                      price: "\$${shoe.price}",
-                      category: shoe.category,
-                      id: shoe.id,
-                      name: shoe.name,
-                      image: shoe.imageUrl[0],
+                    return GestureDetector(
+                      onTap: () {
+                        productNotifier.shoeSizes = shoe.sizes;
+                        // print(productNotifier.shoeSizes);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProductPage(
+                                id: shoe.id, category: shoe.category),
+                          ),
+                        );
+                      },
+                      child: ProductCard(
+                        price: "\$${shoe.price}",
+                        category: shoe.category,
+                        id: shoe.id,
+                        name: shoe.name,
+                        image: shoe.imageUrl[0],
+                      ),
                     );
                   },
                 );

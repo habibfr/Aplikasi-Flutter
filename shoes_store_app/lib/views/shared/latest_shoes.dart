@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:shoes_store_app/views/shared/stagger_tile.dart';
+import 'package:shoes_store_app/views/ui/product_page.dart';
 
 import '../../models/sneaker_model.dart';
 
@@ -46,10 +47,21 @@ class LatestShoes extends StatelessWidget {
                           : MediaQuery.of(context).size.height * 0.3),
                   itemBuilder: (context, index) {
                     final shoe = snapshot.data![index];
-                    return StaggerTile(
-                      price: "\$${shoe.price}",
-                      name: shoe.name,
-                      imageUrl: shoe.imageUrl[0],
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProductPage(
+                                id: shoe.id, category: shoe.category),
+                          ),
+                        );
+                      },
+                      child: StaggerTile(
+                        price: "\$${shoe.price}",
+                        name: shoe.name,
+                        imageUrl: shoe.imageUrl[0],
+                      ),
                     );
                   },
                 );

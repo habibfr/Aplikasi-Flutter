@@ -21,7 +21,7 @@ class CheckoutButton extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
               color: Colors.red,
-              borderRadius: BorderRadius.all(Radius.circular(12))),
+              borderRadius: BorderRadius.all(Radius.circular(5))),
           height: 45,
           width: MediaQuery.of(context).size.width * 0.9,
           child: Center(

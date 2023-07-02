@@ -3,6 +3,10 @@ import 'package:ionicons/ionicons.dart';
 import 'package:kantin/models/cart_model.dart';
 import 'package:kantin/services/helper.dart';
 import 'package:kantin/shared/app_style.dart';
+import 'package:kantin/ui/home_page.dart';
+import 'package:provider/provider.dart';
+
+import '../controllers/order_notifier.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});
@@ -29,174 +33,235 @@ class _CartPageState extends State<CartPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Order")),
-      body: FutureBuilder<List<Order>>(
-        future: _order,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
-          } else if (snapshot.hasError) {
-            // print(snapshot.error);
-            return Text("Error ${snapshot.error}");
-          } else {
-            final orders = snapshot.data;
-            double grandtotal = 0.0;
-            for (var order in orders!) {
-              grandtotal += order.total;
-            }
+      appBar: AppBar(
+        title: Text("Order"),
+        backgroundColor: Colors.red,
+      ),
+      body: Consumer<OrderNotifier>(
+        builder: (context, orderNotifier, child) {
+          DateTime now = DateTime.now();
+          DateTime date = DateTime(now.year, now.month, now.day);
+          String tgl = date.toString().replaceAll("00:00:00.000", "");
+          // print(orderNotifier.orders);
+          return FutureBuilder<List<Order>>(
+            future: _order,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator();
+              } else if (snapshot.hasError) {
+                // print(snapshot.error);
+                return Text("Error ${snapshot.error}");
+              } else {
+                final orders = snapshot.data;
+                double grandtotal = 0.0;
+                for (var order in orders!) {
+                  grandtotal += order.total;
+                }
 
-            // print(shoes);
-            return Stack(
-              children: [
-                Container(
-                  padding: EdgeInsets.fromLTRB(16, 10, 0, 0),
-                  height: MediaQuery.of(context).size.height * 0.15,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage("assets/images/banner.png"),
-                          fit: BoxFit.fill)),
-                  child: Container(
-                    padding: EdgeInsets.only(left: 5, bottom: 15),
-                    width: MediaQuery.of(context).size.width,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 110, left: 15, right: 15),
-                  child: Column(
-                    children: [
-                      Text(
-                        "Checkout",
-                        style: appStyle(20, Colors.black, FontWeight.bold),
+                // print(shoes);
+                return Stack(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.fromLTRB(16, 10, 0, 0),
+                      height: MediaQuery.of(context).size.height * 0.15,
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage("assets/images/banner.png"),
+                              fit: BoxFit.fill)),
+                      child: Container(
+                        padding: EdgeInsets.only(left: 5, bottom: 15),
+                        width: MediaQuery.of(context).size.width,
                       ),
-                      Column(
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 110, left: 15, right: 15),
+                      child: Column(
                         children: [
-                          Text("Order 01 Juli 202 #001"),
-                          Divider(
-                            color: Colors.red,
-                            height: 10,
+                          Text(
+                            "Checkout",
+                            style: appStyle(20, Colors.black, FontWeight.bold),
                           ),
+                          Column(
+                            children: [
+                              Text("Order ${tgl} "),
+                              Divider(
+                                color: Colors.red,
+                                height: 10,
+                              ),
 
-                          // list order
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.305,
-                            child: ListView.builder(
-                              itemCount: orders!.length,
-                              scrollDirection: Axis.vertical,
-                              itemBuilder: (context, index) {
-                                final order = snapshot.data![index];
+                              // list order
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.355,
+                                child: ListView.builder(
+                                  itemCount: orderNotifier.orders.length,
+                                  scrollDirection: Axis.vertical,
+                                  itemBuilder: (context, index) {
+                                    final order = orderNotifier.orders[index];
 
-                                // print(order);
-                                return Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Row(
+                                    return Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
-                                        Image.asset(order.imageUrl),
-                                        SizedBox(
-                                          width: 20,
-                                        ),
-                                        Column(
+                                        Row(
                                           children: [
-                                            Text(order.name),
-                                            Row(
+                                            Image.asset(
+                                              order['imageUrl'],
+                                              height: 70,
+                                              width: 70,
+                                            ),
+                                            SizedBox(
+                                              width: 20,
+                                            ),
+                                            Column(
                                               children: [
-                                                InkWell(
-                                                  child: Icon(
-                                                      Ionicons.remove_circle),
-                                                ),
-                                                Container(
-                                                    margin:
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 10),
-                                                    child: Text(
-                                                        order.qty.toString())),
-                                                InkWell(
-                                                  child:
-                                                      Icon(Ionicons.add_circle),
+                                                Text(order['name']),
+                                                Row(
+                                                  children: [
+                                                    InkWell(
+                                                      onTap: () {
+                                                        if (orderNotifier
+                                                                    .orders[
+                                                                index]['qty'] !=
+                                                            1) {
+                                                          orderNotifier
+                                                              .updateKurangOrder(
+                                                                  orderNotifier
+                                                                      .orders,
+                                                                  index);
+                                                        } else {
+                                                          orderNotifier.orders
+                                                              .removeAt(index);
+                                                        }
+                                                        orderNotifier
+                                                            .grandTotal = 0;
+                                                        orderNotifier
+                                                            .hitungrandTotal();
+                                                      },
+                                                      child: Icon(Ionicons
+                                                          .remove_circle),
+                                                    ),
+                                                    Container(
+                                                        margin: EdgeInsets
+                                                            .symmetric(
+                                                                horizontal: 10),
+                                                        child: Text(order['qty']
+                                                            .toString())),
+                                                    InkWell(
+                                                      onTap: () {
+                                                        orderNotifier
+                                                            .updateTambahOrder(
+                                                                orderNotifier
+                                                                    .orders,
+                                                                index);
+
+                                                        orderNotifier
+                                                            .grandTotal = 0;
+                                                        orderNotifier
+                                                            .hitungrandTotal();
+                                                      },
+                                                      child: Icon(
+                                                          Ionicons.add_circle),
+                                                    ),
+                                                  ],
                                                 ),
                                               ],
                                             ),
                                           ],
                                         ),
+                                        Container(
+                                          margin: EdgeInsets.symmetric(
+                                              horizontal: 20),
+                                          child: Text(
+                                            "Rp. ${order['total'].toString()}",
+                                            style: appStyle(16, Colors.black,
+                                                FontWeight.bold),
+                                          ),
+                                        ),
                                       ],
-                                    ),
-                                    Container(
-                                        margin: EdgeInsets.symmetric(
-                                            horizontal: 20),
-                                        child: Text(
-                                          "Rp. ${order.total.toString()}",
-                                          style: appStyle(16, Colors.black,
-                                              FontWeight.bold),
-                                        ))
-                                  ],
-                                );
-                              },
-                            ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                      Divider(
-                        color: Colors.red,
-                        height: 10,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text(
-                            "Items ${orders.length}",
-                            style: appStyle(16, Colors.black, FontWeight.bold),
+                          Divider(
+                            color: Colors.red,
+                            height: 10,
                           ),
-                          Text(
-                            "Total Rp. ${grandtotal}",
-                            style: appStyle(18, Colors.black, FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 40,
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            "Payment",
-                            style: appStyle(18, Colors.black, FontWeight.bold),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Text(
+                                "Items ${orderNotifier.orders.length}",
+                                style:
+                                    appStyle(16, Colors.black, FontWeight.bold),
+                              ),
+                              Text(
+                                "Total Rp. ${orderNotifier.grandTotal}",
+                                style:
+                                    appStyle(18, Colors.black, FontWeight.bold),
+                              ),
+                            ],
                           ),
                           SizedBox(
-                            height: 20,
+                            height: 40,
                           ),
-                        ],
-                      ),
-                      RadioListTile(
-                        title: Text("Ovo"),
-                        value: payment,
-                        groupValue: payment,
-                        onChanged: (value) {
-                          setState(() {
-                            payment = value.toString();
-                          });
-                        },
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              _showSimpleModalDialog(context);
+                          Row(
+                            children: [
+                              Text(
+                                "Payment",
+                                style:
+                                    appStyle(18, Colors.black, FontWeight.bold),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                            ],
+                          ),
+                          RadioListTile(
+                            title: Text("Ovo"),
+                            value: payment,
+                            groupValue: payment,
+                            onChanged: (value) {
+                              setState(() {
+                                payment = value.toString();
+                              });
                             },
-                            child: Text("Bayar"),
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.red),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              ElevatedButton(
+                                onPressed: () {
+                                  orderNotifier.history.add({
+                                    "id": orderNotifier.idHistory,
+                                    "qty": orderNotifier.orders.length,
+                                    "total": orderNotifier.grandTotal
+                                  });
+
+                                  orderNotifier.incrementIdHistory();
+
+                                  _showSimpleModalDialog(context);
+                                  orderNotifier.grandTotal = 0.0;
+                                  orderNotifier.orders.clear();
+                                },
+                                child: Text("Bayar"),
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.red),
+                              )
+                            ],
                           )
                         ],
-                      )
-                    ],
-                  ),
-                ),
-              ],
-            );
-          }
+                      ),
+                    ),
+                  ],
+                );
+              }
+            },
+          );
         },
       ),
     );
@@ -252,6 +317,12 @@ class _CartPageState extends State<CartPage> {
                         ElevatedButton(
                           onPressed: () {
                             Navigator.pop(context);
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      HomePage(username: "Habib"),
+                                ));
                           },
                           child: Text("Oke"),
                           style: ElevatedButton.styleFrom(

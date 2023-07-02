@@ -35,26 +35,10 @@ class _LoginPageState extends State<LoginPage> {
     _refreshUsers();
   }
 
-  // Future<void> _getUser() async {
-  //   await SQLHelper.getUser();
-  //   ScaffoldMessenger.of(context)
-  //       .showSnackBar(SnackBar(content: Text('Successfully add a user')));
-  //   _refreshUsers();
-  // }
-
-  // Future<void> _login() async {
-  //   await SQLHelper.login(_usernameController.text, _passwordController.text);
-
-  //   _refreshUsers();
-  // }
-
   bool _login(String username, String password) {
     // if (id != null) {
     final dataUser = _users.firstWhere((element) =>
         (element['username'] == username) && (element['password'] == password));
-    // _passwordController.text = dataUser['username'];
-    // _descriptionController.text = existingJournal['description'];
-    // }ha
 
     if ((dataUser['username'] != _usernameController.text) &&
         (dataUser['password'] != _passwordController.text)) {
@@ -68,18 +52,20 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     _refreshUsers();
-    // print(_users);
-    // print("..number of items ${_journals.length}");
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
+      resizeToAvoidBottomInset: false,
       body: Padding(
-        padding: EdgeInsets.symmetric(vertical: 60, horizontal: 40),
+        padding: EdgeInsets.symmetric(vertical: 120, horizontal: 40),
         child: Container(
           padding: EdgeInsets.all(50),
-          decoration: BoxDecoration(border: Border.all(color: Colors.red)),
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.red),
+          ),
           child: Center(
               child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -88,15 +74,13 @@ class _LoginPageState extends State<LoginPage> {
                 "M-Kantin",
                 style: appStyle(40, Colors.black, FontWeight.bold),
               ),
-              SizedBox(
-                height: 10,
-              ),
+
               Text(
                 "Food Court Menara Satu Piza",
                 style: appStyle(20, Colors.black, FontWeight.bold),
               ),
               SizedBox(
-                height: 20,
+                height: 40,
               ),
               Padding(
                 padding: const EdgeInsets.all(0),
@@ -107,12 +91,19 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
 
-              TextField(
-                controller: _usernameController,
-                decoration: InputDecoration(
-                  hintText: 'username',
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red),
+              SizedBox(
+                height: 30,
+              ),
+
+              SizedBox(
+                height: 50,
+                child: TextField(
+                  controller: _usernameController,
+                  decoration: InputDecoration(
+                    hintText: 'username',
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.red),
+                    ),
                   ),
                 ),
               ),
@@ -133,30 +124,56 @@ class _LoginPageState extends State<LoginPage> {
                 height: 10,
               ),
 
-              ElevatedButton(
-                onPressed: () async {
-                  try {
-                    bool result = await _login(
-                        _usernameController.text, _passwordController.text);
-                    if (result) {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                HomePage(username: _usernameController.text),
-                          ));
-                    }
-                  } catch (e) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content:
-                            Text('Failed login, username or password wrong!')));
-                  }
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ElevatedButton(
+                    onPressed: () async {
+                      try {
+                        bool result = await _login(
+                            _usernameController.text, _passwordController.text);
+                        if (result) {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => HomePage(
+                                    username: _usernameController.text),
+                              ));
+                        }
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(
+                                'Failed login, username or password wrong!')));
+                      }
 
-                  // _usernameController.text = '';
-                  // _passwordController.text = '';
-                },
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                child: Text("Login"),
+                      _usernameController.text = '';
+                      _passwordController.text = '';
+                    },
+                    style:
+                        ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                    child: Text("Login"),
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  ElevatedButton(
+                    onPressed: () async {
+                      try {
+                        _addUser();
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(
+                                'Failed login, username or password wrong!')));
+                      }
+
+                      _usernameController.text = '';
+                      _passwordController.text = '';
+                    },
+                    style:
+                        ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                    child: Text("Sign Up"),
+                  ),
+                ],
               ),
             ],
           )),

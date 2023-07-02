@@ -1,11 +1,15 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:kantin/controllers/order_notifier.dart';
+import 'package:kantin/models/cart_model.dart';
 import 'package:kantin/models/product_model.dart';
 import 'package:kantin/services/helper.dart';
 import 'package:kantin/shared/app_style.dart';
 import 'package:kantin/shared/floating_btn.dart';
 import 'package:kantin/ui/cart_page.dart';
+import 'package:kantin/ui/history_page.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -58,7 +62,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Consumer<OrderNotifier>(builder: (context, orderNotifier, child) {
-      // print(orderNotifier.quantity);
+      // print(orderNotifier.orders);
       return Scaffold(
         appBar: AppBar(
           title: Text("Home"),
@@ -73,48 +77,48 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               children: [
                 Container(
                   padding: EdgeInsets.fromLTRB(16, 10, 0, 0),
-                  height: MediaQuery.of(context).size.height * 0.25,
+                  height: MediaQuery.of(context).size.height * 0.20,
                   decoration: BoxDecoration(
                       image: DecorationImage(
                           image: AssetImage("assets/images/banner.png"),
                           fit: BoxFit.fill)),
-                  child: Container(
-                    padding: EdgeInsets.only(left: 5, bottom: 15),
-                    width: MediaQuery.of(context).size.width,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Delicious Foods",
-                          style: appStyle(33, Colors.white, FontWeight.bold),
-                        ),
-                        Text(
-                          "Menu",
-                          style: appStyle(33, Colors.white, FontWeight.bold),
-                        ),
-                        TabBar(
-                            padding: EdgeInsets.zero,
-                            indicatorSize: TabBarIndicatorSize.label,
-                            indicatorColor: Colors.transparent,
-                            controller: _tabController,
-                            isScrollable: true,
-                            labelColor: Colors.white,
-                            labelStyle:
-                                appStyle(16, Colors.white, FontWeight.bold),
-                            unselectedLabelColor: Colors.grey.withOpacity(0.3),
-                            tabs: const [
-                              Tab(
-                                text: "All",
-                              ),
-                              Tab(
-                                text: "Crispy Chicken",
-                              ),
-                              Tab(
-                                text: "Rice",
-                              )
-                            ]),
-                      ],
-                    ),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  padding: EdgeInsets.only(top: 16, bottom: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Delicious Foods",
+                        style: appStyle(33, Colors.white, FontWeight.bold),
+                      ),
+                      Text(
+                        "Menu",
+                        style: appStyle(33, Colors.white, FontWeight.bold),
+                      ),
+                      TabBar(
+                          padding: EdgeInsets.zero,
+                          indicatorSize: TabBarIndicatorSize.label,
+                          indicatorColor: Colors.transparent,
+                          controller: _tabController,
+                          isScrollable: true,
+                          labelColor: Colors.white,
+                          labelStyle:
+                              appStyle(20, Colors.white, FontWeight.bold),
+                          unselectedLabelColor: Colors.grey.withOpacity(0.3),
+                          tabs: [
+                            Tab(
+                              text: "All",
+                            ),
+                            Tab(
+                              text: "Crispy Chicken",
+                            ),
+                            Tab(
+                              text: "Rice",
+                            )
+                          ]),
+                    ],
                   ),
                 ),
                 Padding(
@@ -135,7 +139,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                 return Text("Error ${snapshot.error}");
                               } else {
                                 final products = snapshot.data;
-                                // print(products);
+
                                 return Column(
                                   children: [
                                     SizedBox(
@@ -153,83 +157,84 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                         scrollDirection: Axis.vertical,
                                         itemBuilder: (context, index) {
                                           final product = products[index];
-                                          // print(product);
-                                          //  product = myProduct[index];
+
                                           return Column(
-                                            // crossAxisAlignment: CrossAxisAlignment.center,
                                             mainAxisAlignment:
                                                 MainAxisAlignment.start,
                                             children: [
                                               Container(
                                                   margin: EdgeInsets.all(10),
-                                                  // decoration: BoxDecoration(
-                                                  //     border:
-                                                  //         Border.all(color: Colors.red)),
-                                                  // height: 50,
                                                   child: Image.asset(
-                                                      product.imageUrl)
-                                                  // Center(child: Text(myProduct[index]['name'])),
-                                                  // child: Text(product.),
-                                                  ),
+                                                      product.imageUrl)),
                                               Text(product.name),
                                               Text(
                                                   "Rp. ${product.price.toString()}"),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  InkWell(
-                                                      onTap: () {
-                                                        setState(() {
-                                                          if (myProduct[index]
-                                                                  ['qty'] ==
-                                                              0) {
-                                                            return;
-                                                          } else {
-                                                            myProduct[index]
-                                                                ['qty'] -= 1;
-                                                            // myProduct[index]['price'] -=
-                                                            //     500;
-                                                            _refreh_min_price();
-                                                          }
-                                                        });
-                                                      },
-                                                      child: Icon(Ionicons
-                                                          .remove_circle)),
-                                                  Container(
-                                                    margin:
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 10),
-                                                    child: Text(myProduct[index]
-                                                            ['qty']
-                                                        .toString()),
+                                              Container(
+                                                margin:
+                                                    EdgeInsets.only(top: 10),
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      width: 2,
+                                                      color: Colors.red),
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                    Radius.circular(5),
                                                   ),
-                                                  InkWell(
+                                                ),
+                                                child: Padding(
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      horizontal: 20,
+                                                      vertical: 4),
+                                                  child: InkWell(
                                                       onTap: () {
-                                                        setState(() {
-                                                          myProduct[index]
-                                                              ['qty'] += 1;
-                                                          orderNotifier
-                                                              .increment();
-                                                          // myProduct[index]['price'] +=
-                                                          //     500;
+                                                        List<
+                                                                Map<String,
+                                                                    dynamic>>
+                                                            order =
+                                                            orderNotifier
+                                                                .orders;
+
+                                                        orderNotifier.orders
+                                                            .add({
+                                                          "id": index,
+                                                          "id_product":
+                                                              product.id,
+                                                          "name": product.name,
+                                                          "qty": 1,
+                                                          "imageUrl":
+                                                              product.imageUrl,
+                                                          "unit_price":
+                                                              product.price,
+                                                          "total": product.price
                                                         });
-                                                        _refreh_price();
+
+                                                        orderNotifier
+                                                                .grandTotal +=
+                                                            product.price;
+
+                                                        ScaffoldMessenger.of(
+                                                                context)
+                                                            .showSnackBar(
+                                                          SnackBar(
+                                                            content: Text(
+                                                                'Successfully add a products'),
+                                                          ),
+                                                        );
                                                       },
-                                                      child: Icon(
-                                                          Ionicons.add_circle)),
-                                                ],
+                                                      child: Text("Add")),
+                                                ),
                                               )
                                             ],
                                           );
-
-                                          //       );
                                         },
                                       ),
                                     ),
                                     CheckoutButton(
                                         onTap: () {
                                           // print(_products);
+
+                                          // orderNotifier.hitungrandTotal();
                                           Navigator.push(
                                               context,
                                               MaterialPageRoute(
@@ -238,7 +243,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                               ));
                                         },
                                         label:
-                                            "Quantity ${orderNotifier.quantity}  Checkout ${_total_price}")
+                                            "Item ${orderNotifier.orders.length}  Checkout ${orderNotifier.grandTotal}")
                                   ],
                                 );
                               }
@@ -282,18 +287,17 @@ class NavigationDrawer extends StatelessWidget {
   Widget buildMenuItems(BuildContext context) => Wrap(
         runSpacing: 16,
         children: [
+          // Text("Hello}")
+
           ListTile(
             leading: Icon(Icons.home_outlined),
             title: Text('Home'),
             onTap: () {
               Navigator.pop(context);
             },
-            // onTap: () => Navigator.of(context).pushReplacement(
-            //     MaterialPageRoute(
-            //         builder: (context) => HomePage(username: "Habib"))),
           ),
           ListTile(
-            leading: Icon(Icons.favorite_border),
+            leading: Icon(Ionicons.cart),
             title: Text('My Order'),
             onTap: () {
               Navigator.pop(context);
@@ -305,27 +309,16 @@ class NavigationDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: Icon(Icons.workspaces_outline),
-            title: Text('Workflow'),
-            onTap: () {},
-          ),
-          ListTile(
             leading: Icon(Icons.update),
-            title: Text('Updates'),
-            onTap: () {},
-          ),
-          Divider(
-            color: Colors.black54,
-          ),
-          ListTile(
-            leading: Icon(Icons.account_tree_outlined),
-            title: Text('Pllugins'),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: Icon(Icons.alarm_outlined),
-            title: Text('Notifications'),
-            onTap: () {},
+            title: Text('History '),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) {
+                  return HistoryPage();
+                },
+              ));
+            },
           ),
         ],
       );

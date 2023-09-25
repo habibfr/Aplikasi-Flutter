@@ -1,0 +1,6 @@
+keytool -genkey -v -keystore D:\HabibFr\Kuliah\SMT_4\Pemrograman_Mobile\App_Flutter\kantin\android\app\upload-keystore.jks -storetype JKS -keyalg RSA -keysize 2048 -validity 10000 -alias upload
+
+
+D:\HabibFr\Kuliah\SMT 4\Pemrograman Mobile\App Flutter\kantin\android\app
+
+habibfr
